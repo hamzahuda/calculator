@@ -110,8 +110,8 @@ function operatorKey(button) {
     secondaryNum !== "" &&
     primaryNum !== ""
   ) {
-    primaryNum = "";
     secondaryNum = calculate();
+    primaryNum = "";
     operatorSelected = button;
   } else if (
     operatorSelected !== "" &&
