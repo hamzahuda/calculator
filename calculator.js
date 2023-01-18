@@ -13,6 +13,12 @@ function calculate() {
     case "-":
       return String(round(parseFloat(secondaryNum) - parseFloat(primaryNum)));
     case "÷":
+      if (primaryNum === "0") {
+        prompt("Impossible calculation!");
+        primaryNum = "";
+        secondaryNum = "";
+        return "";
+      }
       return String(round(parseFloat(secondaryNum) / parseFloat(primaryNum)));
     case "⨉":
       return String(round(parseFloat(secondaryNum) * parseFloat(primaryNum)));
@@ -82,9 +88,9 @@ function functionKey(button) {
 function operatorKey(button) {
   if (button === "=") {
     if (operatorSelected !== "" && secondaryNum !== "" && primaryNum !== "") {
-      primaryNum = calculate();
       secondaryNum = "";
       operatorSelected = "";
+      primaryNum = calculate();
     }
   } else if (
     // All the other operators
@@ -100,9 +106,9 @@ function operatorKey(button) {
     secondaryNum !== "" &&
     primaryNum !== ""
   ) {
-    secondaryNum = calculate();
     primaryNum = "";
     operatorSelected = button;
+    secondaryNum = calculate();
   } else if (
     operatorSelected !== "" &&
     secondaryNum !== "" &&
