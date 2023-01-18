@@ -3,11 +3,25 @@
 // MODEL
 let primaryNum = "";
 let secondaryNum = "";
-let operatorSelected = null;
+let operatorSelected = "";
 let decimalPressed = false;
 
 function calculate() {
-  return 5;
+  switch (operatorSelected) {
+    case "+":
+      return String(round(parseFloat(primaryNum) + parseFloat(secondaryNum)));
+    case "-":
+      return String(round(parseFloat(secondaryNum) - parseFloat(primaryNum)));
+    case "÷":
+      return String(round(parseFloat(secondaryNum) / parseFloat(primaryNum)));
+    case "⨉":
+      return String(round(parseFloat(secondaryNum) * parseFloat(primaryNum)));
+  }
+  operatorSelected = "";
+}
+
+function round(number) {
+  return Math.round(number * 1000000) / 1000000;
 }
 
 // VIEW
@@ -19,11 +33,8 @@ function updatePrimary(string) {
 }
 
 function updateSecondary(string) {
-  secondaryDisplay.innerText = string;
+  secondaryDisplay.innerText = `${string} ${operatorSelected}`;
 }
-
-updatePrimary(String(primaryNum));
-updateSecondary(String(secondaryNum));
 
 let buttons = Array.from(document.querySelectorAll(".button"));
 buttons.forEach((button) => {
@@ -32,6 +43,9 @@ buttons.forEach((button) => {
 
 // CONTROLLER
 function processInput() {
+  if (!primaryNum.includes(".")) {
+    decimalPressed = false;
+  }
   let button = this.innerText;
   switch (button) {
     case "AC":
@@ -59,6 +73,7 @@ function functionKey(button) {
   if (button === "AC") {
     primaryNum = "";
     secondaryNum = "";
+    operatorSelected = "";
   } else {
     primaryNum = primaryNum.substring(0, primaryNum.length - 1);
   }
@@ -66,12 +81,33 @@ function functionKey(button) {
 
 function operatorKey(button) {
   if (button === "=") {
-    primaryNum = calculate();
-    secondaryNum = "";
-    operatorSelected == null;
-  } else {
+    if (operatorSelected !== "" && secondaryNum !== "" && primaryNum !== "") {
+      primaryNum = calculate();
+      secondaryNum = "";
+      operatorSelected = "";
+    }
+  } else if (
+    // All the other operators
+    secondaryNum === "" &&
+    operatorSelected === "" &&
+    primaryNum !== ""
+  ) {
+    operatorSelected = button;
+    secondaryNum = primaryNum;
+    primaryNum = "";
+  } else if (
+    operatorSelected !== "" &&
+    secondaryNum !== "" &&
+    primaryNum !== ""
+  ) {
     secondaryNum = calculate();
     primaryNum = "";
+    operatorSelected = button;
+  } else if (
+    operatorSelected !== "" &&
+    secondaryNum !== "" &&
+    primaryNum === ""
+  ) {
     operatorSelected = button;
   }
 }
