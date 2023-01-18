@@ -13,10 +13,14 @@ function calculate() {
     case "-":
       return String(round(parseFloat(secondaryNum) - parseFloat(primaryNum)));
     case "÷":
-      if (primaryNum === "0") {
-        prompt("Impossible calculation!");
+      if (primaryNum == "0") {
+        prompt(
+          "Impossible calculation!",
+          "Press OK and try a different calculation"
+        );
         primaryNum = "";
         secondaryNum = "";
+        operatorSelected = "";
         return "";
       }
       return String(round(parseFloat(secondaryNum) / parseFloat(primaryNum)));
@@ -49,7 +53,7 @@ buttons.forEach((button) => {
 
 // CONTROLLER
 function processInput() {
-  if (!primaryNum.includes(".")) {
+  if (!String(primaryNum).includes(".")) {
     decimalPressed = false;
   }
   let button = this.innerText;
@@ -88,9 +92,9 @@ function functionKey(button) {
 function operatorKey(button) {
   if (button === "=") {
     if (operatorSelected !== "" && secondaryNum !== "" && primaryNum !== "") {
+      primaryNum = calculate();
       secondaryNum = "";
       operatorSelected = "";
-      primaryNum = calculate();
     }
   } else if (
     // All the other operators
@@ -107,8 +111,8 @@ function operatorKey(button) {
     primaryNum !== ""
   ) {
     primaryNum = "";
-    operatorSelected = button;
     secondaryNum = calculate();
+    operatorSelected = button;
   } else if (
     operatorSelected !== "" &&
     secondaryNum !== "" &&
